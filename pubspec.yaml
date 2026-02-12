@@ -1,0 +1,16 @@
+name: bloc_bindings
+description:  Convenient way to handle providing, listening and watching for multiple blocs state changes
+version: 0.0.1
+repository: https://github.com/dsvishchov/bloc_bindings
+issue_tracker: https://github.com/dsvishchov/bloc_bindings/issues
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+
+dependencies:
+  bloc_presentation: ">=1.0.0"
+  flutter_bloc: ">=8.0.0"
+  get_it: ">=7.0.0"
+  flutter:
+    sdk: flutter
+  provider: ">=6.0.0"
