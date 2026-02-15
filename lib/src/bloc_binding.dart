@@ -12,6 +12,7 @@ class BlocBinding<B extends StateStreamableSource<S>, S> {
     this.create,
     this.listener,
     this.listenWhen,
+    this.watch = true,
   });
 
   final String? id;
@@ -19,6 +20,7 @@ class BlocBinding<B extends StateStreamableSource<S>, S> {
   B? value;
   final BlocWidgetListener<S>? listener;
   final BlocListenerCondition<S>? listenWhen;
+  final bool watch;
 
   void register(GetIt scope) {
     value = scope.registerBloc<B>(
@@ -52,7 +54,7 @@ class BlocBinding<B extends StateStreamableSource<S>, S> {
     return null;
   }
 
-  void watch(BuildContext context) => context.watch<B>();
+  void watchBloc(BuildContext context) => context.watch<B>();
 
   Type get blocType => B;
   Type get stateType => S;

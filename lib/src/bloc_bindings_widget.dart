@@ -149,7 +149,9 @@ class _BlocsBindingsElement extends StatelessElement {
 
   void watch(BuildContext context) {
     for (final binding in bindings) {
-      binding.watch(context);
+      if (binding.watch) {
+        binding.watchBloc(context);
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 name: bloc_bindings
 description:  Convenient way to handle providing, listening and watching for multiple blocs state changes
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dsvishchov/bloc_bindings
 issue_tracker: https://github.com/dsvishchov/bloc_bindings/issues
 
