@@ -46,7 +46,9 @@ abstract class BlocBindingsWidget extends StatelessWidget {
 class _BlocsBindingsElement extends StatelessElement {
   _BlocsBindingsElement(super.widget);
 
-  final scope = GetIt.asNewInstance();
+  final scope = GetIt
+   .asNewInstance()
+   ..enableRegisteringMultipleInstancesOfOneType();
   final List<GetIt> ancestors = [];
 
   late final List<BlocBinding> bindings;
