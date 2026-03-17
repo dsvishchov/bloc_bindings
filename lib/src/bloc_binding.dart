@@ -68,6 +68,7 @@ class BlocBindingWithPresentation<B extends BlocPresentationMixin<S, E>, S, E> e
     super.create,
     super.listener,
     super.listenWhen,
+    super.watch,
     this.presentationListener,
   });
 
