@@ -30,21 +30,23 @@ export 'bloc_binding.dart';
 /// will be looked up in scopes of all ancestors, which is an alternative
 /// for `context.read` approach.
 abstract class BlocBindingsWidget extends StatelessWidget {
-  const BlocBindingsWidget({
-    required GlobalKey key,
-  }) : super(key: key);
+  BlocBindingsWidget({super.key});
+
+  final _handle = _BlocBindingsHandle();
 
   List<BlocBinding> get bindings;
 
   B blocs<B extends StateStreamableSource>([String? id]) =>
-    ((key as GlobalKey).currentContext as _BlocsBindingsElement).blocs<B>(id);
+    _handle.element.blocs<B>(id);
 
   @override
-  StatelessElement createElement() => _BlocsBindingsElement(this);
+  StatelessElement createElement() => _BlocsBindingsElement(this, _handle);
 }
 
 class _BlocsBindingsElement extends StatelessElement {
-  _BlocsBindingsElement(super.widget);
+  _BlocsBindingsElement(super.widget, this._handle);
+
+  _BlocBindingsHandle _handle;
 
   final scope = GetIt.asNewInstance();
   final List<GetIt> ancestors = [];
@@ -73,11 +75,21 @@ class _BlocsBindingsElement extends StatelessElement {
       }
     }
 
+    _handle.attach(this);
     super.mount(parent, newSlot);
   }
 
   @override
+  void update(covariant BlocBindingsWidget newWidget) {
+    _handle.detach(this);
+    _handle = newWidget._handle;
+    _handle.attach(this);
+    super.update(newWidget);
+  }
+
+  @override
   void unmount() {
+    _handle.detach(this);
     scope.reset();
     super.unmount();
   }
@@ -152,6 +164,36 @@ class _BlocsBindingsElement extends StatelessElement {
       if (binding.watch) {
         binding.watchBloc(context);
       }
+    }
+  }
+}
+
+class _BlocBindingsHandle {
+  _BlocsBindingsElement? _element;
+
+  _BlocsBindingsElement get element {
+    final element = _element;
+    if (element == null) {
+      throw StateError(
+        'blocs() can only be called while the BlocBindingsWidget is mounted.',
+      );
+    }
+    return element;
+  }
+
+  void attach(_BlocsBindingsElement element) {
+    final attachedElement = _element;
+    if (attachedElement != null && !identical(attachedElement, element)) {
+      throw StateError(
+        'The same BlocBindingsWidget instance cannot be mounted more than once.',
+      );
+    }
+    _element = element;
+  }
+
+  void detach(_BlocsBindingsElement element) {
+    if (identical(_element, element)) {
+      _element = null;
     }
   }
 }
