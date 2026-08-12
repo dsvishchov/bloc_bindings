@@ -44,9 +44,10 @@ abstract class BlocBindingsWidget extends StatelessWidget {
 }
 
 class _BlocsBindingsElement extends StatelessElement {
-  _BlocsBindingsElement(super.widget, this._handle);
+  _BlocsBindingsElement(super.widget, _BlocBindingsHandle handle)
+    : _handles = {handle};
 
-  _BlocBindingsHandle _handle;
+  final Set<_BlocBindingsHandle> _handles;
 
   final scope = GetIt.asNewInstance();
   final List<GetIt> ancestors = [];
@@ -75,21 +76,24 @@ class _BlocsBindingsElement extends StatelessElement {
       }
     }
 
-    _handle.attach(this);
+    for (final handle in _handles) {
+      handle.attach(this);
+    }
     super.mount(parent, newSlot);
   }
 
   @override
   void update(covariant BlocBindingsWidget newWidget) {
-    _handle.detach(this);
-    _handle = newWidget._handle;
-    _handle.attach(this);
+    _handles.add(newWidget._handle);
+    newWidget._handle.attach(this);
     super.update(newWidget);
   }
 
   @override
   void unmount() {
-    _handle.detach(this);
+    for (final handle in _handles) {
+      handle.detach(this);
+    }
     scope.reset();
     super.unmount();
   }

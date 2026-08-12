@@ -1,3 +1,7 @@
+## 0.0.5
+
+- Fixes after removing GlobalKey requirement
+
 ## 0.0.4
 
 - Get rid of the GlobalKey requirement
