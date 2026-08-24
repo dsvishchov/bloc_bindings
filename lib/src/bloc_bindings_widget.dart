@@ -49,7 +49,9 @@ class _BlocsBindingsElement extends StatelessElement {
 
   final Set<_BlocBindingsHandle> _handles;
 
-  final scope = GetIt.asNewInstance();
+  final scope = GetIt
+   .asNewInstance()
+   ..enableRegisteringMultipleInstancesOfOneType();
   final List<GetIt> ancestors = [];
 
   late final List<BlocBinding> bindings;
